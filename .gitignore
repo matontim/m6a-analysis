@@ -1,0 +1,12 @@
+# R session/history files
+.Rhistory
+.RData
+.Rprofile
+
+# Data files (too large for GitHub, downloaded separately)
+data/*.tab
+data/*.csv
+data/*.RData
+
+# macOS
+.DS_Store
