@@ -52,4 +52,16 @@ This project uses publicly available data from (cite paper), hosted on Harvard D
 
 **Dataset:** https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/8TFC38
 
-Each file represents pooled replicates (n=3) using m6A)
+Each file represents pooled replicates (n=3) using m6Anet's pooling functionality. Download files using the Comma Separated Values option on Dataverse, and place them in the corresponding subfolder. The data is not tracked in git due to file size (see .gitignore).
+
+A matching GTF annotation file is also required for transcript region/biotype annotation steps, and is downloaded separately (include instructions).
+
+## Notes and Limitations
+
+- Vignette build failure: devtools::install_github("hannalee809/m6AnetAnalyzer", build_vignettes = TRUE) failed to build the vignette due to missing dplyr prefix for functions n() in m6AnetAnalyzer.Rmd and ungroup() in R/run_wmr_differential_test.R.
+    - Fix: Clone the repo locally, apply the dplyr:: namespace fixes described in the linked issue, and install from the patched local copy with devtools::install_local(..., build_vignettes = TRUE, force = TRUE)
+- Pandoc must be installed (brew install pandoc) for vignette building.
+
+## Citation
+
+1. Batool SM, Lee H, Escobedo AK, Gashi D, Faber K, Khanna P, Haas KD, Hsia T, Carter BS, Balaj L. Deregulating m6A regulators leads to altered RNA biology in glioma cell lines. bioRxiv [Preprint]. 2025 Aug 19:2024.10.28.620763. doi: 10.1101/2024.10.28.620763. PMID: 40894734; PMCID: PMC12393272.
