@@ -56,6 +56,10 @@ Each file represents pooled replicates (n=3) using m6Anet's pooling functionalit
 
 A matching GTF annotation file is also required for transcript region/biotype annotation steps, and is downloaded separately (include instructions).
 
+## Workflow
+
+(Include later)
+
 ## Notes and Limitations
 
 - Vignette build failure: devtools::install_github("hannalee809/m6AnetAnalyzer", build_vignettes = TRUE) failed to build the vignette due to missing dplyr prefix for functions n() in m6AnetAnalyzer.Rmd and ungroup() in R/run_wmr_differential_test.R.
