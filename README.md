@@ -62,9 +62,45 @@ A matching GTF annotation file is also required for transcript region/biotype an
 
 ## Notes and Limitations
 
-- Vignette build failure: devtools::install_github("hannalee809/m6AnetAnalyzer", build_vignettes = TRUE) failed to build the vignette due to missing dplyr prefix for functions n() in m6AnetAnalyzer.Rmd and ungroup() in R/run_wmr_differential_test.R.
-    - Fix: Clone the repo locally, apply the dplyr:: namespace fixes described in the linked issue, and install from the patched local copy with devtools::install_local(..., build_vignettes = TRUE, force = TRUE)
+- Vignette build failure: 
+```R
+devtools::install_github("hannalee809/m6AnetAnalyzer", build_vignettes = TRUE)
+```
+failed to build the vignette due to missing dplyr prefix for functions n() in m6AnetAnalyzer.Rmd and ungroup() in R/run_wmr_differential_test.R.
+    - Fix: Clone the repo locally, apply the dplyr:: namespace fixes described in the linked issue, and install from the patched local copy with 
+```R 
+    devtools::install_local(..., build_vignettes = TRUE, force = TRUE)
+```
 - Pandoc must be installed (brew install pandoc) for vignette building.
+- While working through the function summarize_m6anet_output(), I encountered the following error:
+>txdbmaker::makeTxDbFromGFF() has moved from GenomicFeatures >= 1.61.1. 
+Please call txdbmaker::makeTxDbFromGFF() to get rid of this error. I ran 
+```Bash
+grep -rn "GenomicFeatures::makeTxDbFromGFF\|makeTxDbFromGFF" ~/Documents/m6AnetAnalyzer/R/
+```
+to identify where GenomicFeatures::makeTxDbFromGFF() is being called with the old namespace instead of txdbmaker::makeTxDbFromGFF(). This produced the misleading errors 
+```Bash
+could not find function "create_bed_file"/unused argument (alist())
+```
+    - Fix: Correct the namespace issues in the local repo clone, as done with the dplyr:: namespace fixes.
+    - R/get_transcript_region_lengths.R (line 9 + 25):
+```R
+# Bug:
+#' @importFrom GenomicFeatures makeTxDbFromGFF
+txdb <- GenomicFeatures::makeTxDbFromGFF(gtf_path, format = "gtf")
+
+# Fix:
+#' @importFrom txdbmaker makeTxDbFromGFF
+txdb <- txdbmaker::makeTxDbFromGFF(gtf_path, format = "gtf")
+```
+    - R/map_relative_tx_regions_to_m6A.R (line 15):
+```R
+# Bug:
+#' @importFrom GenomicFeatures makeTxDbFromGFF
+
+# Fix:
+#' @importFrom txdbmaker makeTxDbFromGFF
+```
 
 ## Citation
 

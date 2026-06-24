@@ -68,13 +68,32 @@ naive_wmr <- calculate_weighted_mod_ratio(naive_m6A_with_tx_annotations,
 head(naive_wmr)
 
 # Convert to genomic coordinates and create BED files
-create_bed_file(
+bed_output <- create_bed_file(
   filtered_data_naive,
   gtf_path,
   output_bed = "results/tables/m6A_naive_gli36.bed",
   output_bedgraph = "results/tables/m6A_naive_gli36.bedgraph"
 )
 
-args(create_bed_file)
-find("create_bed_file")
-print(create_bed_file)
+# Load example RBP annotation
+data("example_rbp_annotation")
+
+# Define columns
+colnames(example_rbp_annotation) <- c(
+  "chr", "start", "end", "peak_id", "strand",
+  "RBP_name", "experiment_method", "sample",
+  "accession_of_raw_data", "conf_score"
+)
+
+# Show first few lines
+head(example_rbp_annotation)
+
+# Step 3: Run annotation function
+annotated_naive_with_rbp <- annotate_m6a(
+  bed_output$m6a_df_with_genoimics_coordinates,
+  example_rbp_annotation,
+  feature_col = "RBP_name"
+)
+
+# Show output #1: dataframe with the overlapping features and m6A row index
+head(annotated_naive_with_rbp$overlap_df)
