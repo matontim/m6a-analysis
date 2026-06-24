@@ -73,15 +73,17 @@ failed to build the vignette due to missing dplyr prefix for functions n() in m6
 ```
 - Pandoc must be installed (brew install pandoc) for vignette building.
 - While working through the function summarize_m6anet_output(), I encountered the following error:
->txdbmaker::makeTxDbFromGFF() has moved from GenomicFeatures >= 1.61.1. 
-Please call txdbmaker::makeTxDbFromGFF() to get rid of this error. I ran 
+```R
+txdbmaker::makeTxDbFromGFF() has moved from GenomicFeatures >= 1.61.1. 
+Please call txdbmaker::makeTxDbFromGFF() to get rid of this error. 
+```
+
+I ran 
 ```Bash
 grep -rn "GenomicFeatures::makeTxDbFromGFF\|makeTxDbFromGFF" ~/Documents/m6AnetAnalyzer/R/
 ```
-to identify where GenomicFeatures::makeTxDbFromGFF() is being called with the old namespace instead of txdbmaker::makeTxDbFromGFF(). This produced the misleading errors 
-```Bash
-could not find function "create_bed_file"/unused argument (alist())
-```
+to identify where GenomicFeatures::makeTxDbFromGFF() is being called with the old namespace instead of txdbmaker::makeTxDbFromGFF(). This produced the misleading errors could not find function "create_bed_file" and unused argument (alist())
+
     - Fix: Correct the namespace issues in the local repo clone, as done with the dplyr:: namespace fixes.
     - R/get_transcript_region_lengths.R (line 9 + 25):
 ```R
