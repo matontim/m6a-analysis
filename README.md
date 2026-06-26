@@ -28,7 +28,7 @@ m6a-cell-lines-analysis/
 │       └── (filename TBD)
 
 ├── scripts/
-│   └── 01_qc_and_summary.R
+│   └── 01_naive.R
 ├── results/
 │   ├── figures/
 │   └── tables/
@@ -58,7 +58,12 @@ A matching GTF annotation file is also required for transcript region/biotype an
 
 ## Workflow
 
-(Include later)
+1. Load m6Anet per-site probability output and compute QC and summary statistics
+2. Compute transcript-level WMRs
+3. Perform comparative methylation analysis
+4. ntegrate methylation results with gene expression; summarize transcript biotype/region distributions
+5. Visualize m6A sites on IGV and incorporate external BED annotations
+
 
 ## Notes and Limitations
 
