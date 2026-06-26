@@ -82,10 +82,11 @@ I ran
 ```Bash
 grep -rn "GenomicFeatures::makeTxDbFromGFF\|makeTxDbFromGFF" ~/Documents/m6AnetAnalyzer/R/
 ```
-to identify where GenomicFeatures::makeTxDbFromGFF() is being called with the old namespace instead of txdbmaker::makeTxDbFromGFF(). This produced the misleading errors could not find function "create_bed_file" and unused argument (alist())
+to identify where GenomicFeatures::makeTxDbFromGFF() is being called with the old namespace instead of txdbmaker::makeTxDbFromGFF(). This produced the misleading errors could not find function "create_bed_file" and unused argument (alist()).
 
     - Fix: Correct the namespace issues in the local repo clone, as done with the dplyr:: namespace fixes.
     - R/get_transcript_region_lengths.R (line 9 + 25):
+
 ```R
 # Bug:
 #' @importFrom GenomicFeatures makeTxDbFromGFF
@@ -103,6 +104,7 @@ txdb <- txdbmaker::makeTxDbFromGFF(gtf_path, format = "gtf")
 # Fix:
 #' @importFrom txdbmaker makeTxDbFromGFF
 ```
+- annotate_m6a() input mismatch: In section 5.2, the vignette passes example_m6A_naive_gli36_BED (a built-in example dataset) as the first argument to annotate_m6a(), but never clarifies which output from create_bed_file() to use in a real analysis. bed_output$m6a_df_with_genomic_coordinates (the natural choice) fails with Missing required m6A coordinate columns in m6a_df because it uses genomic_pos rather than start/end column names. The correct substitute is bed_output$bed_df, which is in BED6 format and has the chr, start, end, strand columns annotate_m6a() expects. This script uses bed_output$bed_df accordingly.
 
 ## Citation
 
