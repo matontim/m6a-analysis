@@ -73,3 +73,76 @@ bed_output_igf <- create_bed_file(
   output_bed = "results/tables/m6A_igf_gli36.bed",
   output_bedgraph = "results/tables/m6A_igf_gli36.bedgraph"
 )
+
+# Load example RBP annotation
+data("example_rbp_annotation")
+
+# Define columns
+colnames(example_rbp_annotation) <- c(
+  "chr", "start", "end", "peak_id", "strand",
+  "RBP_name", "experiment_method", "sample",
+  "accession_of_raw_data", "conf_score"
+)
+
+# Show first few lines
+head(example_rbp_annotation)
+
+# Step 3: Run annotation function
+# Note: annotate_m6a() expects columns chr, start, end, strand
+# bed_output$bed_df (BED6 format) has these column names, whereas
+# bed_output$m6a_df_with_genomic_coordinates uses 'genomic_pos' instead
+# of 'start'/'end' and fails the function's column check.
+annotated_igf_with_rbp <- annotate_m6a(
+  bed_output_igf$bed_df,
+  example_rbp_annotation,
+  feature_col = "RBP_name"
+)
+
+# Show output #1: dataframe with the overlapping features and m6A row index
+head(annotated_igf_with_rbp$overlap_df)
+
+# Show output #2: m6a dataframe with the summarized overlaping features
+annotated_m6A_df_igf <- annotated_igf_with_rbp$annotated_m6A_df_igf
+head(annotated_m6A_df_igf[!is.na(annotated_m6A_df_igf$Overlapping_Features), ])
+
+# Using built in example external datasets
+# Note: example built in datasets were already demonstrated in 01_naive.R
+# File paths
+rbp_file <- system.file("extdata", "RBP_POSTAR_human_subset.bed",
+package = "m6AnetAnalyzer")
+snp_file <- system.file("extdata", "dbSNP_human_subset.bed",
+package = "m6AnetAnalyzer")
+
+# Load data
+rbp_df <- readr::read_tsv(rbp_file, col_names = F)
+snp_df <- readr::read_tsv(snp_file, col_names = F)
+
+# set columns
+colnames(rbp_df) <- c(
+  "chr",                   # Chromosome of the RBP binding site
+  "start",                 # Start position (0-based)
+  "end",                   # End position
+  "peak_id",               # Unique identifier for the peak
+  "strand",                # Strand of the peak (+ or -)
+  "RBP_name",              # Name of the RNA-binding protein
+  "experiment_method",     # Method used to detect the peak (e.g., CLIP-seq, PIP-seq)
+  "sample",                # Sample or condition in which the peak was observed
+  "accession_of_raw_data", # Accession number for the raw experiment data
+  "conf_score"             # Confidence score or enrichment measure for the peak
+)
+
+colnames(snp_df) <- c(
+  "chr",                  # Chromosome of the SNP
+  "start",                # Start position (0-based)
+  "end",                  # End position (1-based; SNP occupies 1 bp)
+  "snp_id",               # Unique SNP identifier
+  "variation",            # Allele variation (e.g., A>G)
+  "strand",               # Strand information (usually "*" for SNPs)
+  "clinical_significance",# Clinical annotation of the SNP (e.g., benign, pathogenic)
+  "function_class",       # Functional classification (e.g., exonic, intronic)
+  "gene"                  # Associated gene symbol or ID
+)
+
+head(rbp_df)
+
+head(snp_df)
