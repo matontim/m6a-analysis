@@ -90,13 +90,13 @@ Scripts implementing each step live in `scripts/`, numbered by condition in exec
  
 ## Notes and Limitations
  
-Several bugs were encountered during setup and use of this analysis. These have been [reported upstream](https://github.com/hannalee809/m6AnetAnalyzer/issues).
+Several issues were encountered during setup and use of this analysis. These have been [reported upstream](https://github.com/hannalee809/m6AnetAnalyzer/issues).
  
-### Installation bugs
+### Installation issues
  
 Five namespace issues were found where functions from `dplyr` and `txdbmaker` are called without namespace prefixes, causing them to resolve to the wrong function or fail entirely:
  
-| File | Location | Bug | Fix |
+| File | Location | Issue | Fix |
 |---|---|---|---|
 | `vignettes/m6AnetAnalyzer.Rmd` | ~line 540, `simulate_wmr_replicate()` | bare `n()` | `dplyr::n()` |
 | `R/run_wmr_differential_test.R` | lines 54, 95 | bare `ungroup()` | `dplyr::ungroup()` |
@@ -112,7 +112,7 @@ devtools::install_local("~/path/to/m6AnetAnalyzer", build_vignettes = TRUE, forc
  
 Note: Pandoc must be installed (e.g., `brew install pandoc`) for vignette building to work.
  
-### Runtime/documentation bugs
+### Runtime/documentation issues
  
 - **`annotate_m6a()` input — vignette uses built-in example dataset:** In section 5.2, the vignette passes `example_m6A_naive_gli36_BED` (a built-in example dataset) as the first argument to `annotate_m6a()`, but never clarifies which output from `create_bed_file()` to use in a real analysis. `bed_output$m6a_df_with_genomic_coordinates` (the natural choice) fails with `Missing required m6A coordinate columns in m6a_df` because it uses `genomic_pos` rather than `start`/`end` column names. The correct substitute is `bed_output$bed_df`, which is in BED6 format and has the `chr`, `start`, `end`, `strand` columns `annotate_m6a()` expects. This script uses `bed_output$bed_df` accordingly.
 
@@ -122,7 +122,7 @@ Note: Pandoc must be installed (e.g., `brew install pandoc`) for vignette buildi
 - [x] IGF2BP2 KD 
 - [x] ALKBH5 KD
 - [x] METTL
-- [ ] Comparative analysis — pending lab input on which conditions to compare
+- [ ] Comparative analysis
 
 ## Citation
  
